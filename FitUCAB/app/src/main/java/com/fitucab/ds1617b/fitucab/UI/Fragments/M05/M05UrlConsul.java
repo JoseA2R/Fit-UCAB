@@ -70,7 +70,7 @@ public class M05UrlConsul {
      * Insertar Actividad
      */
 
-    public static String _urlInsert( String hini,String hfin, String  fech, String km, String cal,
+    public static String _urlInsertAct( String hini,String hfin, String  fech, String km, String cal,
                                      String lugini, String lugfin ,String idPer,  String idSpor){
         return IP.getIp()+"M05_ServicesActivity/insertActivity?horainicia="+hini
                 +"&horafinal="+hfin

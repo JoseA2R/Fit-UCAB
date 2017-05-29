@@ -119,6 +119,7 @@ public class M05LogExerciseFragment extends Fragment implements
             public void onClick(View v) {
                 nombreDeport= _spin.getSelectedItem().toString();
                 makeIdSport();
+                makeInsertLog();
             }
         });
     }
@@ -194,8 +195,10 @@ public class M05LogExerciseFragment extends Fragment implements
                             @Override
                             public void onResponse(String response) {
                                 //Limpia los textos
-                                _idDeporte = response;
+                                Sport deporte = gson.fromJson(response,Sport.class);
+                                _idDeporte = String.valueOf(deporte.getId());
                                 Log.e("ID DEL DEPOOOOORTEEE",response);
+                                Log.e("ID DEL DEPOOOOORTEEE",_idDeporte);
                             }
                         }, new Response.ErrorListener() {
 
@@ -219,9 +222,15 @@ public class M05LogExerciseFragment extends Fragment implements
     {                    //Esta es la consulta para insertar una actividad
 
 
-       /* String consult =M05UrlConsul._urlInsertAct(String.valueOf(String.valueOf(_tv_time.getText()),
-                "12:12",String.valueOf(_tv_date.getText()),""
-                ,String.valueOf(_cal.getText()),null,null,userID,_idDeporte);
+        String consult = M05UrlConsul._urlInsertAct(String.valueOf(_tv_time.getText()),
+                                                     "12:12",
+                                                     String.valueOf(_tv_date.getText()),
+                                                     "",
+                                                     String.valueOf(_cal.getText()),
+                                                     null,
+                                                     null,
+                                                     String.valueOf(userID),
+                                                     _idDeporte);
         final StringRequest stringRequest = new StringRequest
                 (Request.Method.GET, consult,
                         new Response.Listener<String>() {
@@ -241,7 +250,7 @@ public class M05LogExerciseFragment extends Fragment implements
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);*/
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
 
     }
 
