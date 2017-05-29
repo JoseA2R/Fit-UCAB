@@ -59,32 +59,30 @@ public class M05_ServicesSport {
     @Path("/getSport")
 
     @Produces("application/json")
-    /**
-     * 
-	 * Extrae el nombre de los deportes en funcion del id
-     * @param nameSpo
-     * @return
-     */
+/**
+ *
+ * Extrae el nombre de los deportes en funcion del id
+ * @param nameSpo
+ * @return
+ */
 
-    public String getSport(@QueryParam("nameSpo") String nombre){
- 
-        idSpo=obtenerIdSport(nombre)
-        Sport resultado = null;
+    public String getSport(@QueryParam("nameSpo") String nombre) {
+        Sport resultado = new Sport();
 
         //Declarando la sentencia de la funcion de obtenerDatosDeporte que devuelve todos los datos de los deportes
-        String query = "select * from M05_obtenerdatosdeporte('"+id+"')";
+        String query = "SELECT * from  M05_obtenerdatosdeporte('"+nombre+"')";
 
-        try{
+        try {
 
-            Statement    st = conn.createStatement();
-            ResultSet    rs =  st.executeQuery(query);
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
 
-            while(rs.next()){
+            while (rs.next()) {
 
-                Integer numero = rs.getInt(   "iddeporte");
-                String  nombre = rs.getString("nombredeporte");
-		        float   mets   = rs.getFloat("metdeporte");
-                 resultado=new Sport(numero,nombre,mets);
+                Integer numero = rs.getInt("iddeporte");
+                String nombre1 = rs.getString("nombredeporte");
+                float mets = rs.getFloat("metdeporte");
+                resultado = new Sport(numero, nombre1, mets);
 
 
             }
