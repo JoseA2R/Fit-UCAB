@@ -41,6 +41,7 @@ public class M05StartTrackingActivity extends GeoLocalization implements
     private SimpleDateFormat sdfDate;
     private int idSport;
 
+
     public M05StartTrackingActivity() {
 
     }

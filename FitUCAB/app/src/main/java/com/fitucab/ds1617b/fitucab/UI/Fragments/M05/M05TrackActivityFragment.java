@@ -1,9 +1,8 @@
 package com.fitucab.ds1617b.fitucab.UI.Fragments.M05;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.InflateException;
@@ -68,6 +67,7 @@ public class M05TrackActivityFragment extends Fragment implements OnMapReadyCall
     boolean respuesta;
     private Marker locMarker;
     private GeoLocalization geoLoc = new GeoLocalization();
+    private LatLng loc;
 
 
     //Constructor
@@ -121,10 +121,24 @@ public class M05TrackActivityFragment extends Fragment implements OnMapReadyCall
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        // Set a preference for minimum and maximum zoom.
+        mMap.setMinZoomPreference(6.0f);
+        mMap.setMaxZoomPreference(14.0f);
+
+
+
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //LatLng sydney = new LatLng(-34, 151);
+        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        loc = new LatLng(10.500000, -66.916664);
+        locMarker = mMap.addMarker(new MarkerOptions()
+                .position(loc)
+                .title("Usted Está Aquí"));
+        locMarker.setTag(0);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+
     }
 
     public User activityTestUser(){
@@ -309,6 +323,19 @@ public class M05TrackActivityFragment extends Fragment implements OnMapReadyCall
                 });
 // Access the RequestQueue through your singleton class.
         VolleySingleton.getInstance(this.getContext()).addToRequestQueue(stringRequest);
+    }
+
+    public void initGeoLocation(){
+        ArrayList<Location> LocationPoints = new ArrayList<Location>();
+        geoLoc.checkLastLocation(LocationPoints);
+        if (LocationPoints==null){
+            while (LocationPoints == null){
+                geoLoc.checkLastLocation(LocationPoints);
+            }
+        }else {
+            loc= new LatLng(LocationPoints.get(0).getLatitude(),LocationPoints.get(0).getLongitude());
+            locMarker.setPosition(loc);
+        }
     }
 
 }
