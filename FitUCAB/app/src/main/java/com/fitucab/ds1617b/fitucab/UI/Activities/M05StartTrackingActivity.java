@@ -39,6 +39,7 @@ public class M05StartTrackingActivity extends GeoLocalization implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
     private SimpleDateFormat sdfDate;
+    private int idSport;
 
     public M05StartTrackingActivity() {
 
@@ -327,11 +328,13 @@ public class M05StartTrackingActivity extends GeoLocalization implements
         sport = (Sport) mExtras.get("sport");
         user = (User) mExtras.get("user");
 
+        idSport = sport.getId();
         mets = sport.get_met();
         weight = user.get_weight();
 
         Log.i("SPORT",sport.getName());
         Log.i("SPORT",String.valueOf(sport.get_met()));
+        Log.i("SPORT IDDD",String.valueOf(sport.getId()));
         Log.i("USER", String.valueOf(user.get_idUser()));
     }
 
@@ -396,7 +399,7 @@ public class M05StartTrackingActivity extends GeoLocalization implements
 
         final String URL = baseIp.getIp() + "M05_ServicesActivity/"+M05UrlConsul._urlInsertAct(activity.get_startime(),
                 activity.get_endtime(),activity.get_starsite(),activity.get_endsite(),activity.get_date(),
-                String.valueOf(activity.get_km()),String.valueOf(activity.get_calor()), user.get_idUser(),1);
+                String.valueOf(activity.get_km()),String.valueOf(activity.get_calor()), user.get_idUser(),sport.getId());
 
         Gson gson = new Gson();
 

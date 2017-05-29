@@ -1,7 +1,9 @@
 package com.fitucab.ds1617b.fitucab.UI.Fragments.M05;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.InflateException;
@@ -14,10 +16,14 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.fitucab.ds1617b.fitucab.Helper.IpStringConnection;
+import com.fitucab.ds1617b.fitucab.Helper.ManagePreferences;
 import com.fitucab.ds1617b.fitucab.Helper.OnFragmentSwap;
 import com.fitucab.ds1617b.fitucab.Helper.Rest.VolleySingleton;
 import com.fitucab.ds1617b.fitucab.Model.Sport;
@@ -31,6 +37,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -52,6 +61,9 @@ public class M05TrackActivityFragment extends Fragment implements OnMapReadyCall
     private ListView _sportsListView;
     private ArrayList<String> mSportsbyUser = new ArrayList<>();
     private String _mSportName;
+    private ManagePreferences mP = new ManagePreferences();
+    private int userID;
+    boolean respuesta;
 
 
     //Constructor
@@ -158,8 +170,17 @@ public class M05TrackActivityFragment extends Fragment implements OnMapReadyCall
     }
 
     public void initArguments(){
-        mUser = activityTestUser();
-        //requestSportsbyId(mUser.get_idUser());
+        userID = mP.getIdUser(getContext());
+        userID =1;
+        mUser.set_idUser(userID);
+
+
+        toAskWebService(userID);
+
+        if (respuesta == false)
+             mUser.set_weight((float) 65.8);
+        //mUser = activityTestUser();
+        //requestSportIdbyName(mUser.get_idUser());
 
     }
 
@@ -197,11 +218,93 @@ public class M05TrackActivityFragment extends Fragment implements OnMapReadyCall
     }
 
 
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
          _mSportName = parent.getItemAtPosition(position).toString();
         requestSportbyName(_mSportName);
+        requestSportIdbyName(_mSportName);
     }
+
+    private void toAskWebService(int id) {
+
+        try {
+
+            RequestQueue requestQueue = Volley.newRequestQueue(_view.getContext());
+            String webUrl=  baseIp.getIp() +"M02Users/"+id;
+            Log.i("ASKUSER", "toAskWebService: "+webUrl);
+            JsonObjectRequest jsonrequest= new  JsonObjectRequest(Request.Method.GET, webUrl, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.i("ONSRES", "onResponse: "+response.toString());
+                    setJsonView(response);
+                    respuesta = true;
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.i("ERROR", " ERROR"+ error.toString());
+                    respuesta = false;
+                }
+            });
+            requestQueue.add(jsonrequest);
+            throw new NullPointerException("Respons Nulo");
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setJsonView(JSONObject response) {
+        try {
+
+            mUser.set_weight(response.getLong("weight"));
+
+            throw new JSONException("Error con el Json");
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+        catch (NullPointerException e){
+
+            e.printStackTrace();
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+
+    }
+
+    public void requestSportIdbyName(final String sportName) {
+        final String URL = baseIp.getIp() + "M05_ServicesSport/getSport?nameSpo=" + sportName;
+        Log.i("SPORTNAME",_mSportName);
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Gson gson = new Gson();
+                        mSport = gson.fromJson(response.toString(),Sport.class);
+                        mSport.setName(sportName);
+
+
+                        Log.i("Nombre", response.toString());
+                        Log.i("MET", String.valueOf(mSport.get_met()));
+                        Log.i("ID METODO",String.valueOf(mSport.getId()));
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(_view.getContext(), "Hola, no devolvio nada", Toast.LENGTH_LONG);
+                    }
+                });
+// Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(this.getContext()).addToRequestQueue(stringRequest);
+    }
+
 }

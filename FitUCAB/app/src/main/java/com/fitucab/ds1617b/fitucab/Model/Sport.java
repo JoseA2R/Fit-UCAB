@@ -11,7 +11,9 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Sport implements Serializable {
 
+    @SerializedName("_id")
     private int id;
+    @SerializedName("_name")
     private String name;
     @SerializedName("_met")
     private float _met;
