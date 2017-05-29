@@ -189,7 +189,6 @@ public class M05TrackActivityFragment extends Fragment implements OnMapReadyCall
 
     public void initArguments(){
         userID = mP.getIdUser(getContext());
-        userID =1;
         mUser.set_idUser(userID);
 
 

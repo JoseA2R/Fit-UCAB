@@ -219,7 +219,7 @@ public class M05LogExerciseFragment extends Fragment implements
     {                    //Esta es la consulta para insertar una actividad
 
 
-       /* String consult =M05UrlConsul._urlInsertAct(String.valueOf(String.valueOf(_tv_time.getText()),
+        String consult =M05UrlConsul._urlInsertAct(String.valueOf(String.valueOf(_tv_time.getText()),
                 "12:12",String.valueOf(_tv_date.getText()),""
                 ,String.valueOf(_cal.getText()),null,null,userID,_idDeporte);
         final StringRequest stringRequest = new StringRequest
@@ -241,7 +241,7 @@ public class M05LogExerciseFragment extends Fragment implements
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);*/
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
 
     }
 
