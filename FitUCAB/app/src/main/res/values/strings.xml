@@ -110,7 +110,7 @@
     <string name="_tst_m05_messageerrordelete">No se pudo eliminar, intentelo mas tarde</string>
     <string name="_tst_m05_messageerrormodify">No se pudo MODIFICAR, intentelo mas tarde</string>
     <string name="_tst_m05_messagereload">No se puede conectar al servidor, intente mas tarde o refresque la ventana</string>
-    <string name="_tst_m05_seletectitemonetouch">Debe seleccionar prolongadamente el item para ver opciones</string>
+    <string name="_tst_m05_seletectitemonetouch">Debe seleccionar prolongadamente el item</string>
 
     <!--FIN Strings Modulo 5 -->
 
